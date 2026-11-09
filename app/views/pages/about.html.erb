@@ -1,0 +1,48 @@
+<% content_for :title, "About" %>
+<%# RUBRIC 2.1 — About page with the data source details from 1.1 (+ ERD from 1.2) %>
+<div class="row">
+  <div class="col-lg-8">
+    <p class="label mb-2">Colophon</p>
+    <h1 class="mb-4">About Shade Finder</h1>
+    <p>Shade Finder is a Ruby on Rails app for browsing eye makeup products — eyeshadows and eyeliners —
+      with their brands, categories, tags, colour shades and customer reviews.</p>
+
+    <%# RUBRIC 1.1 — Describe datasets %>
+    <h2 class="mt-5 mb-3">Data sources</h2>
+    <ol>
+      <li><strong>Makeup API — eyeshadow endpoint</strong>
+        (<a href="https://makeup-api.herokuapp.com/api/v1/products.json?product_type=eyeshadow">products.json?product_type=eyeshadow</a>).
+        A JSON array of products. Each product has a brand, name, price, rating, category (palette, cream, pencil…),
+        description, image links, a <code>tag_list</code> array (Vegan, Organic, EWG Verified…) and a
+        <code>product_colors</code> array of <code>{ hex_value, colour_name }</code> objects.</li>
+      <li><strong>Makeup API — eyeliner endpoint</strong>
+        (<a href="https://makeup-api.herokuapp.com/api/v1/products.json?product_type=eyeliner">products.json?product_type=eyeliner</a>).
+        Same structure as the eyeshadow endpoint, with categories like liquid, pencil and gel.</li>
+      <li><strong>Faker gem</strong> — fake customer reviews (name, 1–5 stars, text, date) attached to every product.</li>
+    </ol>
+
+    <h2 class="mt-5 mb-3">How the data is structured and related</h2>
+    <p>Each nested part of the API JSON becomes its own table:</p>
+    <ul>
+      <li>The <code>brand</code> string becomes a <strong>brands</strong> row — a brand has many products.</li>
+      <li>The <code>category</code> string becomes a <strong>categories</strong> row — a category has many products
+        (products with no category go to “Uncategorized”).</li>
+      <li>Each <code>tag_list</code> entry becomes a <strong>tags</strong> row, joined to products through
+        <strong>product_tags</strong> (many-to-many).</li>
+      <li>Each unique <code>hex_value</code> becomes a <strong>colors</strong> row, joined to products through
+        <strong>product_colors</strong>, which also stores the brand's <code>colour_name</code> (many-to-many).
+        The same hex shade can appear in products from different brands.</li>
+      <li>The Faker <strong>reviews</strong> belong to a product — a product has many reviews.</li>
+    </ul>
+    <p>Both API endpoints share the same brands, categories, tags and colors tables, so the two datasets are
+      integrated: for example, a brand page shows that brand's eyeshadows and eyeliners together.</p>
+  </div>
+</div>
+
+<%# RUBRIC 1.2 — Database ERD %>
+<h2 class="mt-5 mb-3">Database ERD</h2>
+<div class="row">
+  <div class="col-12">
+    <%= image_tag "erd.svg", alt: "Entity relationship diagram of the Shade Finder database", class: "img-fluid erd" %>
+  </div>
+</div>

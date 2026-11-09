@@ -1,0 +1,11 @@
+<%# Shared list for Brands / Categories / Tags index pages %>
+<ol class="index-list">
+  <% records.each do |record| %>
+    <li>
+      <%= link_to path_for.call(record) do %>
+        <span class="serif"><%= record.respond_to?(:display_name) ? record.display_name : record.name %></span>
+        <span class="label"><%= pluralize(record.products_count, "product") %></span>
+      <% end %>
+    </li>
+  <% end %>
+</ol>

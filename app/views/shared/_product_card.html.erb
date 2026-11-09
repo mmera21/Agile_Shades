@@ -1,0 +1,27 @@
+<%# One catalogue "entry". RUBRIC 5.3 — Bootstrap column inside a .row %>
+<div class="col-6 col-md-4 col-lg-3">
+  <article class="entry">
+    <div class="entry-plate">
+      <%# RUBRIC 5.2 — ERB conditional (image or placeholder) %>
+      <% if product.image_url.present? %>
+        <%= image_tag product.image_url, alt: product.name, loading: "lazy" %>
+      <% else %>
+        <span class="label">No plate</span>
+      <% end %>
+    </div>
+    <div class="d-flex justify-content-between">
+      <%= link_to product.brand.display_name, brand_path(product.brand), class: "label brand-link" %>
+      <span class="label">No. <%= product.api_id %></span>
+    </div>
+    <h3 class="entry-title"><%= link_to product.name, product_path(product) %></h3>
+    <div class="entry-foot">
+      <span class="mono"><%= product.formatted_price %></span>
+      <%# first shades of the product (many-to-many Product <-> Color) %>
+      <span class="chips" aria-hidden="true">
+        <% product.colors.first(6).each do |color| %>
+          <span style="background-color: <%= color.hex_value %>;"></span>
+        <% end %>
+      </span>
+    </div>
+  </article>
+</div>

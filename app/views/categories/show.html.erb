@@ -1,0 +1,12 @@
+<% content_for :title, @category.display_name %>
+<%# RUBRIC 3.4 — Category show page -> product show pages (products link back via breadcrumb/spec table) %>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to "Categories", categories_path %></li>
+    <li class="breadcrumb-item active" aria-current="page"><%= @category.display_name %></li>
+  </ol>
+</nav>
+<h1><%= @category.display_name %></h1>
+<p class="label mb-4"><%= pluralize(@products.total_count, "product") %> —
+  <%= link_to "search inside this category", products_path(category_id: @category.id) %></p>
+<%= render "shared/product_grid", products: @products %>

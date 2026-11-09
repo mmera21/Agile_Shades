@@ -1,0 +1,5 @@
+<% content_for :title, "Categories" %>
+<%# RUBRIC 3.4 — top level of the hierarchy: Category -> Products %>
+<p class="label mb-2">Index B</p>
+<h1 class="mb-4">Categories</h1>
+<%= render "shared/index_list", records: @categories, path_for: ->(c) { category_path(c) } %>

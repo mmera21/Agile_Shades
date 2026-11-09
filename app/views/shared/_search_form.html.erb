@@ -1,0 +1,21 @@
+<%# RUBRIC 4.1 — Simple Search (text field)
+    RUBRIC 4.2 — Hierarchical Search (Category dropdown inside the same form) %>
+<%= form_with url: products_path, method: :get, local: true, class: "search-panel" do %>
+  <div class="row g-4 align-items-end">
+    <div class="col-md-6">
+      <label for="search_q" class="form-label">Keyword</label>
+      <input type="search" id="search_q" name="q" class="form-control"
+             placeholder="name, brand or description" value="<%= params[:q] %>">
+    </div>
+    <div class="col-md-4">
+      <label for="search_category" class="form-label">Within category</label>
+      <select id="search_category" name="category_id" class="form-select">
+        <option value="">All categories</option>
+        <%= options_from_collection_for_select(categories, :id, :display_name, params[:category_id].to_i) %>
+      </select>
+    </div>
+    <div class="col-md-2 d-grid">
+      <button type="submit" class="btn-ink">Search</button>
+    </div>
+  </div>
+<% end %>

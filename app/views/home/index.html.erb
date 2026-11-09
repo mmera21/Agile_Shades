@@ -1,0 +1,46 @@
+<% content_for :title, "Home" %>
+<section class="cover">
+  <p class="label mb-3">Vol. 01 — Eyeshadow &amp; eyeliner</p>
+  <h1>Every shade,<br><em>catalogued.</em></h1>
+</section>
+
+<div class="ledger mb-4">
+  <div><strong><%= @product_count %></strong><span class="label">Products</span></div>
+  <div><strong><%= @brand_count %></strong><span class="label">Brands</span></div>
+  <div><strong><%= @color_count %></strong><span class="label">Unique shades</span></div>
+  <div><strong><%= @review_count %></strong><span class="label">Reviews</span></div>
+</div>
+
+<%# A strip of real hex values from the colors table — each one links to its Color page %>
+<% if @swatches.any? %>
+  <div class="d-flex justify-content-between mb-2">
+    <span class="label">Sampled from the database</span>
+    <span class="label">Refresh for new shades</span>
+  </div>
+  <div class="shade-strip mb-5">
+    <% @swatches.each do |color| %>
+      <%= link_to "", color_path(color), style: "background-color: #{color.hex_value};", title: color.hex_value, "aria-label": "Shade #{color.hex_value}" %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= render "shared/search_form", categories: @categories %>
+
+<div class="row g-5">
+  <div class="col-lg-4">
+    <div class="section-head mt-0"><h2>Categories</h2></div>
+    <ol class="index-list">
+      <% @categories.each do |category| %>
+        <li><%= link_to category_path(category) do %>
+          <span class="serif"><%= category.display_name %></span><span class="label">View</span>
+        <% end %></li>
+      <% end %>
+    </ol>
+  </div>
+  <div class="col-lg-8">
+    <div class="section-head mt-0"><h2>Picked at random</h2><%= link_to "All products", products_path, class: "label" %></div>
+    <div class="row gx-4 entries">
+      <%= render partial: "shared/product_card", collection: @featured, as: :product %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+<%# RUBRIC 2.2 — Menu with links to 2+ locations %>
+<header class="masthead">
+  <div class="container">
+    <div class="masthead-top">
+      <%= link_to root_path, class: "wordmark" do %>Shade <span>Finder</span><% end %>
+      <span class="label d-none d-md-inline">An index of eye colour</span>
+      <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu"
+              aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">Menu</button>
+    </div>
+
+    <nav class="collapse d-md-flex justify-content-between align-items-center" id="mainMenu" aria-label="Main menu">
+      <ul class="menu">
+        <% { "Home" => root_path, "Products" => products_path, "Brands" => brands_path,
+             "Categories" => categories_path, "Tags" => tags_path, "About" => about_path }.each do |label, path| %>
+          <li>
+            <%# RUBRIC 5.2 — ERB conditional: underline the current page %>
+            <% if current_page?(path) %>
+              <%= link_to label, path, class: "active", "aria-current": "page" %>
+            <% else %>
+              <%= link_to label, path %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+
+      <%# RUBRIC 4.1 — quick simple search available from every page %>
+      <%= form_with url: products_path, method: :get, local: true, class: "menu-search py-2", role: "search" do %>
+        <label for="nav_q" class="visually-hidden">Search products</label>
+        <input type="search" id="nav_q" name="q" class="form-control form-control-sm" placeholder="search…" value="<%= params[:q] %>">
+        <button type="submit" class="btn-ink btn-sm">Go</button>
+      <% end %>
+    </nav>
+  </div>
+</header>

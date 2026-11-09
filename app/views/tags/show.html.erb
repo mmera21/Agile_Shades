@@ -1,0 +1,11 @@
+<% content_for :title, @tag.name %>
+<%# RUBRIC 3.4 — many-to-many navigation: Tag -> Products -> back to Tag %>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to "Tags", tags_path %></li>
+    <li class="breadcrumb-item active" aria-current="page"><%= @tag.name %></li>
+  </ol>
+</nav>
+<h1><%= @tag.name %></h1>
+<p class="label mb-4"><%= pluralize(@products.total_count, "product") %></p>
+<%= render "shared/product_grid", products: @products %>

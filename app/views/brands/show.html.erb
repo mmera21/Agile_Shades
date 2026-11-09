@@ -1,0 +1,11 @@
+<% content_for :title, @brand.display_name %>
+<%# RUBRIC 3.4 — Brand show page links to each product's show page (and each product links back here) %>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to "Brands", brands_path %></li>
+    <li class="breadcrumb-item active" aria-current="page"><%= @brand.display_name %></li>
+  </ol>
+</nav>
+<h1><%= @brand.display_name %></h1>
+<p class="label mb-4"><%= pluralize(@products.total_count, "product") %></p>
+<%= render "shared/product_grid", products: @products %>

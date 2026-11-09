@@ -1,0 +1,9 @@
+<% if products.any? %>
+  <div class="row gx-4 entries">
+    <%= render partial: "shared/product_card", collection: products, as: :product %>
+  </div>
+  <%# RUBRIC 3.5 — Pagination links (kaminari, custom views in app/views/kaminari) %>
+  <%= paginate products %>
+<% else %>
+  <p class="notice">No products match. Try another word or category.</p>
+<% end %>

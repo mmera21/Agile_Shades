@@ -1,0 +1,20 @@
+<% content_for :title, "Products" %>
+<%# RUBRIC 3.1 — Collection navigation (all products as catalogue entries) %>
+<p class="label mb-2">The catalogue</p>
+<h1 class="mb-4">Products</h1>
+
+<%= render "shared/search_form", categories: @categories %>
+
+<%# RUBRIC 5.2 — ERB conditional: describe the active search / filter %>
+<p class="label mb-3">
+  <% if params[:q].present? || params[:category_id].present? %>
+    <%= pluralize(@products.total_count, "result") %>
+    <% if params[:q].present? %> for “<%= params[:q] %>”<% end %>
+    <% if params[:category_id].present? %> in <%= Category.find_by(id: params[:category_id])&.display_name %><% end %>
+    — <%= link_to "clear", products_path %>
+  <% else %>
+    All <%= @products.total_count %> products, A–Z
+  <% end %>
+</p>
+
+<%= render "shared/product_grid", products: @products %>

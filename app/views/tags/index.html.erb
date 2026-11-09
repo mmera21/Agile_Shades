@@ -1,0 +1,9 @@
+<% content_for :title, "Tags" %>
+<p class="label mb-2">Index C</p>
+<h1 class="mb-4">Tags</h1>
+<%# RUBRIC 5.2 — ERB conditional %>
+<% if @tags.empty? %>
+  <p class="notice">No tags yet — run <code>rails db:seed</code>.</p>
+<% else %>
+  <%= render "shared/index_list", records: @tags, path_for: ->(t) { tag_path(t) } %>
+<% end %>

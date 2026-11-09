@@ -1,0 +1,104 @@
+<% content_for :title, @product.name %>
+<%# RUBRIC 3.2 — Member page: ALL attributes of one product
+    RUBRIC 3.3 — plus data from associated models (Brand, Category, Tags, Colors, Reviews)
+    RUBRIC 3.4 — links back to the Brand / Category / Tag / Color show pages %>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to "Products", products_path %></li>
+    <li class="breadcrumb-item"><%= link_to @product.category.display_name, category_path(@product.category) %></li>
+    <li class="breadcrumb-item active" aria-current="page">No. <%= @product.api_id %></li>
+  </ol>
+</nav>
+
+<div class="row g-5">
+  <div class="col-md-5">
+    <div class="plate-lg">
+      <% if @product.image_url.present? %>
+        <%= image_tag @product.image_url, alt: @product.name %>
+      <% else %>
+        <span class="label">No plate available</span>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="col-md-7">
+    <%= link_to @product.brand.display_name, brand_path(@product.brand), class: "label" %>
+    <h1 class="mt-2 mb-3"><%= @product.name %></h1>
+    <p class="serif fs-3 mb-4"><%= @product.formatted_price %></p>
+
+    <table class="spec">
+      <tbody>
+        <tr><th scope="row">Brand</th><td><%= link_to @product.brand.display_name, brand_path(@product.brand) %></td></tr>
+        <tr><th scope="row">Category</th><td><%= link_to @product.category.display_name, category_path(@product.category) %></td></tr>
+        <tr><th scope="row">Product type</th><td><%= @product.product_type.titleize %></td></tr>
+        <tr><th scope="row">API rating</th><td><%= @product.rating.present? ? "#{@product.rating} / 5" : "Not rated" %></td></tr>
+        <tr><th scope="row">Customer reviews</th>
+          <td><%= @product.average_stars ? "#{@product.average_stars} / 5 from #{pluralize(@product.reviews.size, 'review')}" : "No reviews" %></td></tr>
+        <tr><th scope="row">Catalogue no. (API id)</th><td class="mono"><%= @product.api_id %></td></tr>
+        <% if @product.product_link.present? %>
+          <tr><th scope="row">Product link</th><td><%= link_to "View on store site", @product.product_link, rel: "noopener", target: "_blank" %></td></tr>
+        <% end %>
+        <% if @product.website_link.present? %>
+          <tr><th scope="row">Brand website</th><td><%= link_to @product.website_link, @product.website_link, rel: "noopener", target: "_blank" %></td></tr>
+        <% end %>
+        <%# Many-to-many #1 — Tags %>
+        <tr><th scope="row">Tags</th>
+          <td>
+            <% if @product.tags.any? %>
+              <% @product.tags.each do |tag| %>
+                <%= link_to tag.name, tag_path(tag), class: "tag-link" %>
+              <% end %>
+            <% else %>
+              <span class="text-muted">None</span>
+            <% end %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <% if @product.description.present? %>
+      <div class="mt-4"><%= simple_format(@product.description) %></div>
+    <% end %>
+  </div>
+</div>
+
+<%# Many-to-many #2 — Colors (each swatch links to its Color show page) %>
+<div class="section-head">
+  <h2>Shades</h2><span class="label"><%= pluralize(@product.product_colors.size, "shade") %></span>
+</div>
+<% if @product.product_colors.any? %>
+  <div class="row g-3">
+    <% @product.product_colors.each do |pc| %>
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <%= link_to color_path(pc.color), class: "swatch-card" do %>
+          <span class="chip" style="background-color: <%= pc.color.hex_value %>;"></span>
+          <span class="cap"><span class="name"><%= pc.colour_name %></span><span class="mono text-muted"><%= pc.color.hex_value %></span></span>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p class="notice">The API lists no shade information for this product.</p>
+<% end %>
+
+<%# One-to-many — Faker Reviews %>
+<div class="section-head">
+  <h2>Reviews</h2><span class="label"><%= pluralize(@product.reviews.size, "review") %></span>
+</div>
+<div class="row gx-5">
+  <% @product.reviews.each do |review| %>
+    <div class="col-md-6">
+      <div class="review">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="label"><%= review.reviewer_name %></span>
+          <span>
+            <span class="meter" aria-hidden="true"><% 5.times do |i| %><i class="<%= 'on' if i < review.stars %>"></i><% end %></span>
+            <span class="mono ms-2"><%= review.stars %>/5</span>
+          </span>
+        </div>
+        <p class="mb-1"><%= review.body %></p>
+        <% if review.reviewed_on %><span class="label"><%= review.reviewed_on.strftime("%d %b %Y") %></span><% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
